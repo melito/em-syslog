@@ -1,0 +1,12 @@
+BUGS: 
+  kqueue doesn't seem to work. (Haven't tested epoll)
+
+TODO: 
+   Benchmark
+   Make sure blocking is minimal/non-existant 
+   Add support for syslog-ng
+     Refactor
+     Add support for TCP (syslog-ng)
+     Add support for TLS (syslog-ng)
+   Clean up API
+   Just improve everything.
