@@ -28,6 +28,7 @@ module EventMachine
           hostname = Socket.gethostname
           day = time.strftime('%b %d').sub(/0(\d)/, ' \\1')
           tag = "#{$0.split('/').last}[#{Process.pid}]"
+          
           send_msg "<#{0 * 8 + severity}>#{day} #{time.strftime('%T')} #{hostname} #{tag}: #{message}"
         end
 
@@ -37,12 +38,15 @@ module EventMachine
               c.send_datagram(data, EM.syslog_server, EM.syslog_port) 
             }
           }
-        end              
+        end
+        private :send_msg
+                      
       end
       
     end
   end
   
+  # Class methods for EM
   class << self
     attr_reader :syslog_server, :syslog_port
     def syslog_setup(server, port=514)

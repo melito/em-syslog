@@ -1,6 +1,7 @@
 require "lib/em/syslog"
 
-SYSLOG_SERVER = '192.168.249.134'
+#SYSLOG_SERVER = '192.168.249.134'
+SYSLOG_SERVER = '0.0.0.0'
 SYSLOG_PORT   = 514
 
 #EM.kqueue
@@ -14,7 +15,7 @@ EM.run {
   #  end
   #end
   
-  EM.add_periodic_timer(10) {    
+  EM.add_periodic_timer(1) {    
     EM.syslog_setup(SYSLOG_SERVER, SYSLOG_PORT)
     
     EM.emergency('system is unusable')

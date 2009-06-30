@@ -1,8 +1,36 @@
+em-syslog
+#########
+Simple syslog integration into EventMachine at the class level.
+
+Still needs work and testing.
+
+To install:
+
+  git clone git://github.com/melito/em-syslog.git
+
+
+SYNOPSIS:
+  
+  # Setup syslog
+  EM.syslog_setup('centralserver.com', 514)
+	 
+  # Send commands
+	EM.emergency('system is unusable')
+  EM.alert('action must be taken immediately')
+  EM.critical('critical conditions')
+  EM.error('error conditions')
+  EM.warning('warning conditions')
+  EM.notice('normal but significant conditions')
+  EM.informational('informational messages')
+  EM.info('informational messages (short name for the previous)')
+  EM.debug('debug-level messages')
+
 BUGS: 
   kqueue doesn't seem to work. (Haven't tested epoll)
 
 TODO: 
    Benchmark
+   Take some of the server examples and insert.
    Make sure blocking is minimal/non-existant 
    Add support for syslog-ng
      Refactor
