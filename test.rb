@@ -17,15 +17,15 @@ EM.run {
   EM.add_periodic_timer(10) {    
     EM.syslog_setup(SYSLOG_SERVER, SYSLOG_PORT)
     
-    EM.emergency('emergency')
-    EM.alert('alert')
-    EM.critical('critical')
-    EM.error('error')
-    EM.warning('warning')
-    EM.notice('notice')
-    EM.informational('informational')
-    EM.info('info')
-    EM.debug('debug')
+    EM.emergency('system is unusable')
+    EM.alert('action must be taken immediately')
+    EM.critical('critical conditions')
+    EM.error('error conditions')
+    EM.warning('warning conditions')
+    EM.notice('normal but significant conditions')
+    EM.informational('informational messages')
+    EM.info('informational messages (short name for the previous)')
+    EM.debug('debug-level messages')
   } 
   
 }
