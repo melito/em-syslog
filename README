@@ -14,6 +14,8 @@ To install:
   
 SYNOPSIS:
   
+  require 'em/syslog'
+
   # Setup syslog
   EM.syslog_setup('centralserver.com', 514)
 	 
