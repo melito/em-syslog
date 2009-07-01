@@ -8,7 +8,10 @@ To install:
 
   git clone git://github.com/melito/em-syslog.git
 
-
+    -or- 
+  
+  sudo gem install melito-em-syslog -s http://gems.github.com
+  
 SYNOPSIS:
   
   # Setup syslog
