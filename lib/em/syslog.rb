@@ -34,9 +34,7 @@ module EventMachine
 
         def send_msg(data)
           EM.next_tick{
-            EM.open_datagram_socket('0.0.0.0', 0) {|c| 
-              c.send_datagram(data, EM.syslog_server, EM.syslog_port) 
-            }
+            EM.syslog_sd.send_datagram(data, EM.syslog_server, EM.syslog_port) 
           }
         end
         private :send_msg
@@ -48,9 +46,10 @@ module EventMachine
   
   # Class methods for EM
   class << self
-    attr_reader :syslog_server, :syslog_port
+    attr_reader :syslog_server, :syslog_port, :syslog_sd
     def syslog_setup(server, port=514)
       @syslog_server, @syslog_port = server, port
+      @syslog_sd = EM.open_datagram_socket('0.0.0.0', 0) # FIXME: Dumb quick fix.
     end
 
     # THIEVERY: http://github.com/kpumuk/ruby_syslog

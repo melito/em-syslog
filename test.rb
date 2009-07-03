@@ -14,9 +14,10 @@ EM.run {
   #    p data      
   #  end
   #end
+
+  EM.syslog_setup(SYSLOG_SERVER, SYSLOG_PORT)
   
   EM.add_periodic_timer(1) {    
-    EM.syslog_setup(SYSLOG_SERVER, SYSLOG_PORT)
     
     EM.emergency('system is unusable')
     EM.alert('action must be taken immediately')

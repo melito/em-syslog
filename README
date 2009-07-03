@@ -43,3 +43,6 @@ TODO:
      Add support for TLS (syslog-ng)
    Clean up API
    Just improve everything.
+
+FIXES:
+   Was creating a new datagram socket everytime a packet was sent out.  Only use one now.
