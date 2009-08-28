@@ -1,3 +1,8 @@
+!!! Don't use this !!!
+
+The UDP stuff looks like its causing all sorts of problems :(
+Working on a solution to fix this and make the system all around more flexible
+
 em-syslog
 #########
 Simple syslog integration into EventMachine at the class level.
