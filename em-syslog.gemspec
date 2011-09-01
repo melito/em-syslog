@@ -1,8 +1,8 @@
 Gem::Specification.new do |s|
   s.name = "em-syslog"
   s.version = "0.0.2"
-  s.date = "2009-06-30"
-  s.authors = ["Mel Gray"]
+  s.date = "2011-09-01"
+  s.authors = ["Mel Gray", "Sean Porter"]
   s.email = "melgray@gmail.com"
   s.has_rdoc = false
   s.summary = "Simple syslog integration into EventMachine at the class level."

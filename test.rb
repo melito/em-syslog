@@ -1,33 +1,40 @@
 require "lib/em/syslog"
+require "test/unit"
 
-#SYSLOG_SERVER = '192.168.249.134'
-SYSLOG_SERVER = '0.0.0.0'
-SYSLOG_PORT   = 514
+module DumbTestHelpers
+  SYSLOG_SERVER = '0.0.0.0'
+  SYSLOG_PORT   = 514
+  
+  # FIXME Assume epoll if we're not on Darwin
+  def set_io_notification_facility_for_platform(platform)
+    if platform.downcase.include?("darwin")
+      EM.kqueue
+    else
+      EM.epoll
+    end
+  end
 
-#EM.kqueue
-#EM.epoll
-EM.run {
-  
-  # This is gonna be our 'syslog' server for testing to make sure we're getting the correct packets
-  #EM.open_datagram_socket SYSLOG_SERVER, SYSLOG_PORT do |c|
-  #  def c.receive_data data
-  #    p data      
-  #  end
-  #end
+  def method_missing(method_sym, *args, &block)
+    # If you call stop_after_10_ticks a timer will be created that will call EM.stop after 10 seconds
+    if method_sym.to_s =~ /stop_after_(\d)_ticks/
+      EM.add_timer($1.to_i) { EM.stop }
+    end
+  end
+end
 
-  EM.syslog_setup(SYSLOG_SERVER, SYSLOG_PORT)
+class EmSyslogDumbTests < Test::Unit::TestCase
+  include DumbTestHelpers
   
-  EM.add_periodic_timer(1) {    
-    
-    EM.emergency('system is unusable')
-    EM.alert('action must be taken immediately')
-    EM.critical('critical conditions')
-    EM.error('error conditions')
-    EM.warning('warning conditions')
-    EM.notice('normal but significant conditions')
-    EM.informational('informational messages')
-    EM.info('informational messages (short name for the previous)')
-    EM.debug('debug-level messages')
-  } 
+  def setup
+    set_io_notification_facility_for_platform(RUBY_PLATFORM)
+  end
+
+  def test_various_set_args
+    assert_nothing_raised(ArgumentError) do
+      EM.run { EM.syslog_setup(SYSLOG_SERVER); stop_after_1_ticks }
+      EM.run { EM.syslog_setup(SYSLOG_SERVER, SYSLOG_PORT); stop_after_1_ticks }
+      EM.run { EM.syslog_setup; stop_after_1_ticks }
+    end
+  end
   
-}
+end
