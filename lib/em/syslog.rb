@@ -48,7 +48,8 @@ module EventMachine
     def syslog_setup(syslog_server = nil, syslog_port = 514)
       if syslog_server.nil?
         unix_socket_path = RUBY_PLATFORM.downcase.include?("darwin") ? '/var/run/syslog' : '/dev/log'
-        socket = EM.connect_unix_domain(unix_socket_path)
+        socket = Socket.new(:UNIX, :DGRAM)
+        socket.connect(Socket.pack_sockaddr_un(unix_socket_path))
       else
         socket = EM.open_datagram_socket('0.0.0.0', 0)
         remote = true
@@ -58,7 +59,7 @@ module EventMachine
         if remote
           socket.send_datagram(message, syslog_server, syslog_port)
         else
-          socket.send_data(message)
+          socket.send(message, 0)
         end
         EM.next_tick do
           @syslog_queue.pop(&message_sender)
