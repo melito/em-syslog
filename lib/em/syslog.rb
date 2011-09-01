@@ -48,7 +48,7 @@ module EventMachine
     def syslog_setup(syslog_server = nil, syslog_port = 514)
       if syslog_server.nil?
         unix_socket_path = RUBY_PLATFORM.downcase.include?("darwin") ? '/var/run/syslog' : '/dev/log'
-        socket = Socket.new(:UNIX, :DGRAM)
+        socket = Socket.new(:UNIX, :DGRAM) # FIXME: ruby 1.8.7 (2011-02-18 patchlevel 334) [i686-darwin10.8.0], MBARI 0x6770, Ruby Enterprise Edition 2011.03
         socket.connect(Socket.pack_sockaddr_un(unix_socket_path))
       else
         socket = EM.open_datagram_socket('0.0.0.0', 0)
