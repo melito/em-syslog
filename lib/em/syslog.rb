@@ -19,9 +19,9 @@ module EventMachine
       }
  
       class << self
-        # THIEVERY: http://github.com/kpumuk/ruby_syslog    
+        # THIEVERY: http://github.com/kpumuk/ruby_syslog
         def log(severity, message, time = nil)
-          raise "Syslog Server not set" if EM.syslog_server.nil?
+          EM.syslog_setup if EM.syslog_queue.nil?
           
           severity = SEVERITIES[severity] if severity.is_a? Symbol
           time ||= Time.now
@@ -29,15 +29,13 @@ module EventMachine
           day = time.strftime('%b %d').sub(/0(\d)/, ' \\1')
           tag = "#{$0.split('/').last}[#{Process.pid}]"
           
-          send_msg "<#{0 * 8 + severity}>#{day} #{time.strftime('%T')} #{hostname} #{tag}: #{message}"
+          send_message "<#{0 * 8 + severity}>#{day} #{time.strftime('%T')} #{hostname} #{tag}: #{message}"
         end
 
-        def send_msg(data)
-          EM.next_tick{
-            EM.syslog_sd.send_datagram(data, EM.syslog_server, EM.syslog_port) 
-          }
+        def send_message(message)
+          EM.syslog_queue.push message
         end
-        private :send_msg
+        private :send_message
                       
       end
       
@@ -46,10 +44,26 @@ module EventMachine
   
   # Class methods for EM
   class << self
-    attr_reader :syslog_server, :syslog_port, :syslog_sd
-    def syslog_setup(server, port=514)
-      @syslog_server, @syslog_port = server, port
-      @syslog_sd = EM.open_datagram_socket('0.0.0.0', 0) # FIXME: Dumb quick fix.
+    attr_reader :syslog_server, :syslog_port, :syslog_queue
+    def syslog_setup(syslog_server, syslog_port = 514)
+      if syslog_server.nil?
+        socket = EM.connect_unix_domain('/dev/log')
+      else
+        socket = EM.open_datagram_socket('0.0.0.0', 0)
+        remote = true
+      end
+      @syslog_queue = EM::Queue.new
+      message_sender = Proc.new do |message|
+        if remote
+          socket.send_datagram(message, server, port)
+        else
+          socket.send_data(message)
+        end
+        EM.next_tick do
+          @syslog_queue.pop(&message_sender)
+        end
+      end
+      @syslog_queue.pop(&message_sender)
     end
 
     # THIEVERY: http://github.com/kpumuk/ruby_syslog
@@ -58,7 +72,7 @@ module EventMachine
         EM::P::Syslog.log(severity, message)
       end
     end
-    
+
   end
 
-end  
+end
