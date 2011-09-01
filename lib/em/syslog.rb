@@ -45,9 +45,10 @@ module EventMachine
   # Class methods for EM
   class << self
     attr_reader :syslog_server, :syslog_port, :syslog_queue
-    def syslog_setup(syslog_server, syslog_port = 514)
+    def syslog_setup(syslog_server = nil, syslog_port = 514)
       if syslog_server.nil?
-        socket = EM.connect_unix_domain('/dev/log')
+        unix_socket_path = RUBY_PLATFORM.downcase.include?("darwin") ? '/var/run/syslog' : '/dev/log'
+        socket = EM.connect_unix_domain(unix_socket_path)
       else
         socket = EM.open_datagram_socket('0.0.0.0', 0)
         remote = true
@@ -55,7 +56,7 @@ module EventMachine
       @syslog_queue = EM::Queue.new
       message_sender = Proc.new do |message|
         if remote
-          socket.send_datagram(message, server, port)
+          socket.send_datagram(message, syslog_server, syslog_port)
         else
           socket.send_data(message)
         end
