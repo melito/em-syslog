@@ -30,13 +30,15 @@ Thread.new do
 end
 
 class TestEMSylog < MiniTest::Unit::TestCase
+  EM::Ventually.total_default = 0.5
+
   SEVERITIES.each do |severity, pri|
     define_method "test_#{severity.to_s}" do
-      message = false
+      message = ''
       EM.syslog_setup(SYSLOG_SERVER, SYSLOG_PORT)
       EM.method(severity).call(severity.to_s)
-      EM.defer(proc { $socket_queue.pop }, proc { |data| message = data })
-      eventually(true) { message.first.include?("<#{pri.to_s}>") }
+      EM.defer(proc { $socket_queue.pop }, proc { |data| message = data.first })
+      eventually(true) { message.include?("<#{pri.to_s}>") }
     end
   end
 
