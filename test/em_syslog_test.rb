@@ -1,4 +1,5 @@
 $: << File.dirname(__FILE__) + '/../lib' unless $:.include?(File.dirname(__FILE__) + '/../lib/')
+require 'rubygems' if RUBY_VERSION < '1.9.0'
 require 'minitest/autorun'
 require 'em-ventually/minitest'
 require 'thread'
