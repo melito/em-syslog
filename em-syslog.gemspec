@@ -10,9 +10,9 @@ Gem::Specification.new do |s|
   s.description = "Simple syslog integration into EventMachine at the class level."
   s.files = ["README",
              "lib/em/syslog.rb",
-             "test.rb"]
+             "test/em_syslog_test.rb"]
   s.add_dependency('eventmachine')
   s.add_development_dependency('rake')
   s.add_development_dependency('minitest')
-  s.add_development_dependency('em-minitest-spec')
+  s.add_development_dependency('em-ventually')
 end
