@@ -13,4 +13,6 @@ Gem::Specification.new do |s|
              "test.rb"]
   s.add_dependency('eventmachine')
   s.add_development_dependency('rake')
+  s.add_development_dependency('minitest')
+  s.add_development_dependency('em-minitest-spec')
 end
