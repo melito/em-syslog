@@ -7,10 +7,20 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
+    callsite (0.0.5)
+      bundler (~> 1.0.0)
+    em-ventually (0.1.2)
+      callsite (~> 0.0.5)
+      eventmachine
     eventmachine (0.12.10)
+    minitest (2.5.1)
+    rake (0.9.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   em-syslog!
+  em-ventually
+  minitest
+  rake
