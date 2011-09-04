@@ -1,0 +1,6 @@
+notifications:
+  irc: "irc.freenode.org#em-syslog"
+branches:
+  only:
+    - master
+    - unix-socket
