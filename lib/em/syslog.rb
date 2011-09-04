@@ -48,7 +48,8 @@ module EventMachine
     def syslog_setup(*args)
       syslog_server, syslog_port = args[0], args[1] || 514
       if syslog_server.nil?
-        unix_socket_path = RUBY_PLATFORM.downcase.include?("darwin") ? '/var/run/syslog' : '/dev/log'
+        raise 'Syslog server not set' if RUBY_PLATFORM.downcase.include?('mswin32')
+        unix_socket_path = RUBY_PLATFORM.downcase.include?('darwin') ? '/var/run/syslog' : '/dev/log'
         socket = Socket.new(Socket::AF_UNIX, Socket::SOCK_DGRAM, 0)
         socket.connect_nonblock(Socket.pack_sockaddr_un(unix_socket_path))
       else
