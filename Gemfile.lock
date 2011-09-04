@@ -1,0 +1,16 @@
+PATH
+  remote: .
+  specs:
+    em-syslog (0.0.2)
+      eventmachine
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    eventmachine (0.12.10)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  em-syslog!
