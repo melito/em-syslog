@@ -12,4 +12,5 @@ Gem::Specification.new do |s|
              "lib/em/syslog.rb",
              "test.rb"]
   s.add_dependency('eventmachine')
+  s.add_development_dependency('rake')
 end
