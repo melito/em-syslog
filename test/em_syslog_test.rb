@@ -45,5 +45,6 @@ class TestEMSylog < MiniTest::Unit::TestCase
 
   def test_domain_socket
     EM.syslog_setup()
+    EM.debug('test_domain_socket')
   end
 end

@@ -60,7 +60,7 @@ module EventMachine
         if remote
           socket.send_datagram(message, syslog_server, syslog_port)
         else
-          socket.send(message, 0)
+          socket.write_nonblock(message)
         end
         EM.next_tick do
           @syslog_queue.pop(&message_sender)
